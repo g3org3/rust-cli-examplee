@@ -17,12 +17,12 @@ jobs:
     - name: Build
       run: cargo build
     - name: Tar binary
-      run: mkdir rust-cli-examplee && mv ./target/debug/rust-cli-examplee rust-cli-examplee && tar -czfv rs.tar.gz rust-cli-examplee
+      run: mkdir rust-cli-examplee && mv ./target/debug/rust-cli-examplee rust-cli-examplee && tar -czfv rs.tar.gz rust-cli-examplee/*
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
       with:
         name: rust-cli-examplee_ubuntu.tar.gz
-        path: ./rust-cli-examplee
+        path: ./rs.tar.gz
         if-no-files-found: error
   build-mac:
     runs-on: macos-latest
@@ -31,11 +31,11 @@ jobs:
     - name: Build
       run: cargo build
     - name: Tar binary
-      run: mkdir rust-cli-examplee && mv ./target/debug/rust-cli-examplee rust-cli-examplee/ && zip rs.zip rust-cli-examplee
+      run: mkdir rust-cli-examplee && mv ./target/debug/rust-cli-examplee rust-cli-examplee/ && zip rs.zip rust-cli-examplee/
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
       with:
         name: rust-cli-examplee_macos.zip
-        path: ./rust-cli-examplee
+        path: ./rs.zip
         if-no-files-found: error
 
