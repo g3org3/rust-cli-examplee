@@ -1,7 +1,6 @@
 use clap::Parser;
 use reqwest;
 use serde::{Deserialize, Serialize};
-use std::process;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GithubUser {
