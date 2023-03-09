@@ -10,17 +10,32 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Build
       run: cargo build
     - name: Tar binary
-      run: tar -czvf rust-cli-examplee-ubuntu.gz.tar ./target/debug/rust-cli-examplee
+      run: mv ./target/debug/rust-cli-examplee .
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
       with:
-        name: rust-cli-examplee 
-        path: ./rust-cli-examplee-ubuntu.gz.tar
+        name: rust-cli-examplee_ubuntu.zip
+        path: ./rust-cli-examplee
         if-no-files-found: error
+  build-mac:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: cargo build
+    - name: Tar binary
+      run: mv ./target/debug/rust-cli-examplee .
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.2
+      with:
+        name: rust-cli-examplee_macos.zip
+        path: ./rust-cli-examplee
+        if-no-files-found: error
+
