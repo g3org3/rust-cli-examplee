@@ -15,10 +15,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: cargo build --verbose
+      run: cargo build
+    - name: Tar binary
+      run: tar -czvf rust-cli-examplee-ubuntu.gz.tar ./target/debug/rust-cli-examplee
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
       with:
         name: rust-cli-examplee 
-        path: ./target/debug/
+        path: ./rust-cli-examplee-ubuntu.gz.tar
         if-no-files-found: error
