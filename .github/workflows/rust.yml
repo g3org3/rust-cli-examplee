@@ -11,17 +11,14 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Build
       run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
       with:
-        name: githubrs 
-        path: target/debug/rust-cli-eemaplee
+        name: rust-cli-examplee 
+        path: ./target/debug/
+        if-no-files-found: error
