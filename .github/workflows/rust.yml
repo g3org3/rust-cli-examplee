@@ -15,12 +15,12 @@ jobs:
     - name: Build
       run: cargo build
     - name: Tar binary
-      run: mkdir rust-cli-examplee && mv ./target/debug/rust-cli-examplee rust-cli-examplee/rust-cli-examplee && tar -czfv rs.tar.gz ./rust-cli-examplee/
+      run: mkdir -p upload/bin && mv ./target/debug/rust-cli-examplee upload/bin/ && cd upload && zip -r rs.zip ./bin
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
       with:
-        name: rust-cli-examplee_ubuntu.tar.gz
-        path: ./rs.tar.gz
+        name: cli-linux.zip
+        path: ./upload/rs.zip
         if-no-files-found: error
   build-mac:
     runs-on: macos-latest
