@@ -1,3 +1,5 @@
+use std::process;
+
 use clap::Parser;
 use reqwest;
 use serde::{Deserialize, Serialize};
@@ -34,7 +36,7 @@ struct Args {
     count: u8,
 
     #[arg(short, long, default_value_t = false)]
-    flag: bool,
+    verbose: bool,
 }
 
 #[derive(Debug)]
@@ -44,23 +46,39 @@ async fn get_user(username: &String) -> Result<GithubUser, CustomError> {
     let client = reqwest::Client::builder()
         .user_agent("curl/7.54.1")
         .build()
-        .unwrap();
+        .map_err(|err| CustomError(err.to_string()))?;
 
-    let url = format!("https://api.github.com/users/{}", username);
-    let res = client.get(url).send().await.unwrap();
+    let url = format!("https://api.gith0ub.com/users/{}", username);
+    let res = client
+        .get(url)
+        .send()
+        .await
+        .map_err(|err| CustomError(err.to_string()))?;
 
-    let user = res.json::<GithubUser>().await.unwrap();
-
-    return Ok(user);
+    res.json::<GithubUser>()
+        .await
+        .map_err(|err| CustomError(err.to_string()))
 }
 
 #[tokio::main]
 async fn main() -> Result<(), ()> {
     let args = Args::parse();
-    let user = get_user(&args.name).await.unwrap();
+    let user_result = get_user(&args.name).await;
 
-    println!("name: {}", args.name);
-    println!("Found {}, with bio {}", user.name, user.bio);
+    match user_result {
+        Err(err) => {
+            if args.verbose {
+                println!("Something wrong happend\n  {:?}", err)
+            } else {
+                println!("Something wrong happend! (try -v to print more details)")
+            }
+            process::exit(1)
+        }
+        Ok(user) => {
+            println!("name: {}", args.name);
+            println!("Found {}, with bio {}", user.name, user.bio);
+        }
+    }
 
-    return Ok(());
+    Ok(())
 }
