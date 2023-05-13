@@ -3,15 +3,15 @@ use std::process;
 
 mod github;
 
-/// Simple program to greet a person
+// Simple program to greet a person
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    /// Name of the person to greet
+    // Name of the person to greet
     #[arg(short, long)]
     name: String,
 
-    /// Number of times to greet
+    // Number of times to greet
     #[arg(short, long, default_value_t = 1)]
     count: u8,
 
@@ -27,7 +27,7 @@ async fn main() -> Result<(), ()> {
     match user_result {
         Err(err) => {
             if args.verbose {
-                println!("{}\n  > {}", err.reason, err.message,);
+                println!("{}\n> {}", err.reason, err.message,);
             } else {
                 println!("{} (try -v to print more details)", err.reason);
             }

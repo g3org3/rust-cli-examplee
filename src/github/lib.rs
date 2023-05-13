@@ -22,17 +22,17 @@ pub async fn get_user(username: &String) -> Result<GithubUser, CustomError> {
         message: err.to_string(),
     })?;
 
-    if res.status().as_u16() != 200 {
+    let status_code = res.status().as_u16();
+    if !res.status().is_success() {
         return Err(CustomError {
             reason: format!(
-                "The request was not 200, instead it was {}, '{}'",
-                res.status().as_u16(),
-                res.text().await.map_err(|err| CustomError {
-                    reason: String::from("we could not get the string"),
-                    message: err.to_string(),
-                })?
+                "The request to github's api was not successful ({}).",
+                status_code
             ),
-            message: format!("response"),
+            message: res.text().await.map_err(|err| CustomError {
+                reason: String::from("we could not get the string"),
+                message: err.to_string(),
+            })?,
         });
     }
 
